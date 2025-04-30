@@ -1,9 +1,13 @@
+from load_map_ import load_map
+"""
 from colorama import init, Fore, Style
 previous_positions = []
 # make a global variable for map
-tentative_map = [[0,1,0],[3,1,0],[2,0,0]]
+"""
+tentative_map = load_map("map1.txt")
 x = 0
 y = 0
+
 
 
 # returns player's current location as an (x,y) tuple
@@ -23,8 +27,8 @@ def getCurrentLocation() -> tuple:
 
 # Takes player to new location. Returns True if successful, false otherwise
 def setLocation(x: int, y: int) -> bool:
-   current_map = tentative_map
-   if 0 <= x < len(current_map) and 0 <= y < len(current_map[0]):
+    current_map = tentative_map
+    if 0 <= x < len(current_map) and 0 <= y < len(current_map[0]):
         if current_map[x][y] == 1 or current_map[x][y] == 3:
             print(f"Teleportation successful, you are now at ({x+1}, {y+1})")
             return True, current_map[x][y] == 3

@@ -1,11 +1,10 @@
 from blessed import Terminal
 import time
-import load_map_ as lm
+import movement as m
 
+game_map=m.tentative_map
 
-term = Terminal()
-game_map = lm.load_map("map1.txt")
-
+term= Terminal()
 tile_symbols = {
     '0': '█',   # wall
     '1': ' ',   # path
@@ -42,10 +41,8 @@ def squirrel_scene():
 
 def squirrel_battle():
     print(term.clear())
-    draw_map()
 
     y = len(game_map) + 1  # message starts below the map
-    #print(term.move_xy(5, y) + "A squirrel attacks you!")
     time.sleep(5)
     squirrel_scene()
     time.sleep(5)
@@ -53,7 +50,7 @@ def squirrel_battle():
     while True:
         key = term.inkey()
         if key.lower() == 'y':
-            print(term.move_xy(5, y + 1) + "You scared it off with your bravery!")
+            print(term.move_xy(5, y + 1) + "You scared it off with your bravery! Congrat, you win the game!")
             break
         elif key.lower() == 'n':
             print(term.move_xy(5, y + 1) + "You lost to the squirrel")
@@ -63,9 +60,6 @@ def squirrel_battle():
     time.sleep(5)
     
 
-# Example usage
-if __name__ == "__main__":
-    with term.fullscreen(), term.cbreak(), term.hidden_cursor():
-        squirrel_battle()
-
-
+#if m.goalReached(): draw_map()
+if True:
+    squirrel_battle()
