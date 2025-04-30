@@ -1,0 +1,34 @@
+from blessed import Terminal
+import time
+from load_map import load_map
+
+term = Terminal()
+game_map = load_map("map1.txt")
+
+def draw_map():
+    with term.location():
+        for y, row in enumerate(game_map):
+            for x, char in enumerate(row):
+                print(term.move_xy(x, y) + str(char), end='', flush=True)
+
+def squirrel_battle():
+    print(term.clear())
+    draw_map()
+
+    y = len(game_map) + 1  # message starts below the map
+    print(term.move_xy(5, y) + "A squirrel attacks you!")
+    time.sleep(1.5)
+
+    if random.random() < 0.5:
+        print(term.move_xy(5, y + 1) + "You scared it off!")
+    else:
+        print(term.move_xy(5, y + 1) + "You lost to the squirrel")
+
+    time.sleep(2)
+
+# Example usage
+if __name__ == "__main__":
+    with term.fullscreen(), term.cbreak(), term.hidden_cursor():
+        squirrel_battle()
+
+
