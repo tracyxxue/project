@@ -3,63 +3,69 @@ import time
 import movement as m
 
 game_map=m.tentative_map
+for x, row in enumerate(game_map):
+     for y, col in enumerate(row):
+          game_map[x][y]=0
+
+locations=m.previous_positions
+for i, row in enumerate(locations):
+     for m, col in enumerate (row):
+          game_map[row][col]=1
+
+
 
 term= Terminal()
-tile_symbols = {
-    '0': '█',   # wall
-    '1': ' ',   # path
-    '2': '✪'    # goal
-}
+symbols_list = {'0': '█', '1': ' ',  '2': '✪'}
 
 def draw_map():
-    with term.location():
-        for y, row in enumerate(game_map):
-            for x, char in enumerate(row):
-                symbol = tile_symbols.get(str(char), '?')
-                print(term.move_xy(x, y) + symbol, end='', flush=True)
+    print(term.clear())
+    for y, row in enumerate(game_map):
+            for x, item in enumerate(row):
+                symbol = symbols_list.get(str(item))
+                print(term.move_xy(x, y) + symbol)
+    time.sleep(1)
 
 
-squirrel_art = [
-    r"   (\__/)",     # ears and head
-    r"   (•ㅅ• )",     # face
-    r"  / 　 づ"       # body and tail
+squirrel = [
+    "   (\__/)",     
+    "   (•ㅅ• )",    
+    "  /    づ"      
 ]
-
-def draw_squirrel(x, y):
-    with term.location():
-        for i, line in enumerate(squirrel_art):
-            print(term.move_xy(x, y + i) + term.bright_yellow + line + term.normal)
+term.line()                                     #print the above squirrel line by line
+def draw_squirrel():
+        for i, line in enumerate(squirrel):
+            print(term.move_xy(5,5+i) + term.yellow + line)
 
 def squirrel_scene():
-    with term.fullscreen(), term.cbreak(), term.hidden_cursor():
+    with term.fullscreen():      #clear the screen after the graphic is shown
         print(term.clear())
         print(term.move_xy(5, 2) + "A squirrel attacks you!")
-        draw_squirrel(5, 4)
+        draw_squirrel()
         time.sleep(3)
 
 
 
 def squirrel_battle():
     print(term.clear())
-
-    y = len(game_map) + 1  # message starts below the map
-    time.sleep(5)
-    squirrel_scene()
-    time.sleep(5)
-    print(term.move_xy(5, y) + "Do you want to fight? (y/n)")
+    squirrel_scene()               
+    time.sleep(3)
+    print(term.move_xy(5, 2) + "Do you want to fight? (y/n)") #ask the player if they want to fight
     while True:
-        key = term.inkey()
+        key = term.inkey()     #take in response from the player
         if key.lower() == 'y':
-            print(term.move_xy(5, y + 1) + "You scared it off with your bravery! Congrat, you win the game!")
+            print(term.move_xy(5,4) + "You scared it off with your bravery! Congrats, you win the game!")
             break
         elif key.lower() == 'n':
-            print(term.move_xy(5, y + 1) + "You lost to the squirrel")
+            print(term.move_xy(5, 4) + "You lost to the squirrel")        #battle with the squirrrel
             break
         else:
-            print(term.move_xy(5, y + 2) + "Please press 'y' or 'n'")
+            print(term.move_xy(5, 5) + "Please press 'y' or 'n'")
     time.sleep(5)
     
 
-#if m.goalReached(): draw_map()
+#if m.goalReached(): 
+draw_map()
 if True:
     squirrel_battle()
+
+
