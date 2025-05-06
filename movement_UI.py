@@ -4,6 +4,7 @@ from progressive_map import *
 from blessed import Terminal
 import time
 map = []
+check = None
 
 def starting_UI():
   print("""
@@ -28,7 +29,7 @@ def starting_UI():
   else:
     print("invalid input.")
     start = input("choose your difficuly level: easy, medium, hard: ")
-    print("""Good Choice! 
+  print("""Good Choice! 
           I have a few more helpful tips for you before you pivot :)
           Your overall goal is to find Mr.KBLALA and use your weapon of choice to fight
           To teleport:
@@ -39,54 +40,20 @@ def starting_UI():
           To check where you have already traveled:
             type "map"
           GET READY TO FIGHT ;)""")
-  print(goalReached())
   check=True
   while check:
-    check = not goalReached()
-    """user_command = input("Enter a command: ")
-    if user_command == "teleport":
-      coords = input("Where would you like to go? (format: x y): ")
+    user_command = input("Enter a command: ")
+    if user_command == "hi":
+      print("hi")
+    elif user_command == "teleport":
+      x_coord = input("which x position would you like to go? ")
+      y_coord = input("which y position would you like to go? ")
       try:
-        x_str, y_str = coords.strip().split()
-        x, y = int(x_str), int(y_str)
+        x, y = int(x_coord), int(y_coord)
         setLocation(x, y)
       except ValueError:
-          print("Invalid coordinates. Please enter two integers separated by space.")"""
-    print("hi")
-    """if user_command = "North?":
-      print(canGoNorth())
-      if canGoNorth() is True:
-        print("north")
-    
-    
-      print(canGoNorth())
-      if canGoNorth() is True:
-        print("Yes you may go North.")
-      else:
-        print("No Road to North is blocked")
-    elif user_command == "South?":
-      canGoSouth()
-      if canGoSouth() is True:
-        print("Yes you may go South.")
-      else:
-        print("No Road to South is blocked")
-    elif user_command == "South?":
-      canGoSouth()
-    elif user_command == "East?":
-      canGoEast()
-    elif user_command == "West?":
-      canGoWest()
-    elif user_command == "Go North":
-      goNorth()
-    elif user_command == "Go South":
-      goSouth()
-    elif user_command == "Go East":
-      goEast()
-    elif user_command == "Go West":
-      goWest()
-    elif user_command == "map":
-      draw_map()
+        print("invalid coordinates. please enter two integers separated by space.")
+        user_command = input("Enter a command: ")
     else:
-      print("Invalid input. Try again.")
-      """
+      print("invalid input")
 starting_UI()
