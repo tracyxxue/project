@@ -48,7 +48,7 @@ def Starting_UI() -> None:
             print("hi")
 
         elif user_command == "north?":
-            answer = canGoNorth()
+            answer = canGoNorth(map)
             if answer == True:
                 print("yes")
             if answer == False:
@@ -64,14 +64,14 @@ def Starting_UI() -> None:
                 print("no")
 
         elif user_command == "east?":
-            answer = canGoEast()
+            answer = canGoEast(map)
             if answer == True:
                 print("yes")
             if answer == False:
                 print("no")
 
         elif user_command == "west?":
-            answer = canGoWest()
+            answer = canGoWest(map)
             if answer == True:
                 print("yes")
             if answer == False:

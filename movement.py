@@ -35,21 +35,18 @@ def setLocation(x, y) -> bool:
     if location is None:
         print("Current location not found.")
         return False
-
     previous_x, previous_y = location  # Already 0-based
-
     # Ensure x and y are 1-based from user, so convert to 0-based for map access
     x0, y0 = x - 1, y - 1
-
     # Check if the new coordinates are in bounds
     if 0 <= x0 < len(game_state.map) and 0 <= y0 < len(game_state.map[0]):
         if game_state.map[x0][y0] in [1, 3]:
             # Reset old location to 1
             game_state.map[previous_x][previous_y] = 1
-
+            previous_locations.append((previous_x+1, previous_y+1))
+            print("previous locations are: ", previous_locations)
             # Set new location to 3
             game_state.map[x0][y0] = 3
-
             print(f"Teleportation successful, you are now at ({x}, {y})")
             for row in game_state.map:
                 print(row)
@@ -60,31 +57,6 @@ def setLocation(x, y) -> bool:
     else:
         print("Invalid coordinates.")
         return False
-
-    def setLocation(x, y) -> bool:
-        location = getCurrentLocation(map)
-        print(location)
-
-        if location is None:
-            print("Current location not found. Cannot set new location.")
-            return False
-
-        previous_x = location[0]  # Convert from 1-based to 0-based indexing
-        previous_y = location[1]
-
-        if 0 <= x < len(map) and 0 <= y < len(map[0]):
-            if map[x - 1][y - 1] == 1 or map[x - 1][y - 1] == 3:
-                print(f"Teleportation successful, you are now at ({x}, {y})")
-                map[previous_x - 1][previous_y - 1] = 1
-                map[x - 1][y - 1] = 3
-                print(map)
-                return True
-            else:
-                print("Location unavailable.")
-                return False
-        else:
-            print("Invalid coordinates.")
-            return False
     
 # print goal reached once player had arrived at the final destination
 def goalReached() -> bool:
@@ -97,10 +69,10 @@ def goalReached() -> bool:
     return True
 
 def canGoNorth(map) -> bool:
-    location = getCurrentLocation()
+    location = getCurrentLocation() #0-based coordinates
     print(location)
-    x = location[0] - 1 # Convert from 1-based to 0-based indexing
-    y = location[1] - 1
+    x = location[0]
+    y = location[1]
     if 1 <= x < len(map) and 0 <= y < len(map[0]):
         if map[x - 1][y] == 1 or map[x - 1][y] == 2:
             return True  # able to go north
@@ -109,8 +81,8 @@ def canGoNorth(map) -> bool:
 def canGoSouth(map) -> bool:
     location = getCurrentLocation()
     print(location)
-    x = location[0] - 1 # Convert from 1-based to 0-based indexing
-    y = location[1] - 1
+    x = location[0]
+    y = location[1]
     if 0 <= x < len(map) - 1 and 0 <= y < len(map[0]):
         if map[x + 1][y] == 1 or map[x + 1][y] == 2:
             return True
@@ -119,8 +91,8 @@ def canGoSouth(map) -> bool:
 def canGoEast(map) -> bool:
     location = getCurrentLocation()
     print(location)
-    x = location[0] - 1 # Convert from 1-based to 0-based indexing
-    y = location[1] - 1
+    x = location[0]
+    y = location[1]
     if 0 <= x < len(map) and 0 <= y+1 < len(map[0]):
         if map[x][y+1] == 1 or map[x][y+1] == 2:
             return True  # able to go east
@@ -129,8 +101,8 @@ def canGoEast(map) -> bool:
 def canGoWest(map) -> bool:
     location = getCurrentLocation()
     print(location)
-    x = location[0] - 1 # Convert from 1-based to 0-based indexing
-    y = location[1] - 1
+    x = location[0]
+    y = location[1]
     if 0 <= x < len(map) and 1 <= y < len(map[0]):
         if map[x][y-1] == 1 or map[x][y-1] == 2:
             return True  # able to go west
