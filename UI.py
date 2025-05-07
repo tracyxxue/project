@@ -80,24 +80,32 @@ def Starting_UI() -> None:
         elif user_command == "go north":
             if goNorth():
                 print("Moved north.")
+                for row in game_state.map:
+                    print(row)
             else:
                 print("Cannot go north.")
 
         elif user_command == "go south":
             if goSouth():
                 print("Moved south.")
+                for row in game_state.map:
+                    print(row)
             else:
                 print("Cannot go south.")
 
         elif user_command == "go east":
             if goEast():
                 print("Moved east.")
+                for row in game_state.map:
+                    print(row)
             else:
                 print("Cannot go east.")
 
         elif user_command == "go west":
             if goWest():
                 print("Moved west.")
+                for row in game_state.map:
+                    print(row)
             else:
                 print("Cannot go west.")
 
@@ -114,6 +122,10 @@ def Starting_UI() -> None:
                 print(map)
             else:
                 print("Teleportation failed. Invalid or blocked location.")
+        
+        elif user_command == "map":
+            print_map()
+
         else:
             print("Invalid input")
 

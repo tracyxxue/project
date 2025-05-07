@@ -19,6 +19,9 @@ def getCurrentLocation():
     return None
 getCurrentLocation()
 
+def print_map():
+    for row in game_state.map:
+        print(row)
 
 def find_start_location(map: list[list[int]]) -> tuple[int, int] | None:
     for row_index, row in enumerate(map):
@@ -117,7 +120,7 @@ def goNorth():
     x, y = location
     if x > 0 and game_state.map[x - 1][y] in [1, 2]:
         game_state.map[x][y] = 1  # Clear old position
-        previous_locations.append((x, y))  # Track history
+        previous_locations.append((x+1, y+1))  # Track history
         print(previous_locations)
         x -= 1
         game_state.map[x][y] = 3  # Set new position
@@ -135,7 +138,7 @@ def goSouth():
     x, y = location
     if x < len(game_state.map) - 1 and game_state.map[x + 1][y] in [1, 2]:
         game_state.map[x][y] = 1
-        previous_locations.append((x, y))
+        previous_locations.append((x+1, y+1))
         print(previous_locations)
         x += 1
         game_state.map[x][y] = 3
@@ -152,7 +155,7 @@ def goEast():
     x, y = location
     if y < len(game_state.map[0]) - 1 and game_state.map[x][y + 1] in [1, 2]:
         game_state.map[x][y] = 1
-        previous_locations.append((x, y))
+        previous_locations.append((x+1, y+1))
         print(previous_locations)
         y += 1
         game_state.map[x][y] = 3
@@ -169,7 +172,7 @@ def goWest():
     x, y = location
     if y > 0 and game_state.map[x][y - 1] in [1, 2]:
         game_state.map[x][y] = 1
-        previous_locations.append((x, y))
+        previous_locations.append((x+1, y+1))
         print(previous_locations)
         y -= 1
         game_state.map[x][y] = 3
