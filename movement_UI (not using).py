@@ -3,7 +3,7 @@ from movement import *
 from progressive_map import *
 from blessed import Terminal
 import time
-map = []
+from game_state import map
 check = None
 
 def starting_UI():

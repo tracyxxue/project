@@ -4,18 +4,21 @@ from colorama import init, Fore, Style
 previous_positions = []
 # make a global variable for map
 """
-map = []
+import game_state
+from game_state import map
 previous_locations = []
 x = 0
 y = 0
 
 # returns player's current location as an (x,y) tuple
-def getCurrentLocation(map) -> tuple:
-    for row_index, row in enumerate(map):
+def getCurrentLocation():
+    for row_index, row in enumerate(game_state.map):
         for col_index, value in enumerate(row):
             if value == 3:
-                return row_index+1, col_index+1
-    return None  # If no 3 is found
+                return row_index, col_index
+    return None
+getCurrentLocation()
+
 
 def find_start_location(map: list[list[int]]) -> tuple[int, int] | None:
     for row_index, row in enumerate(map):
@@ -25,42 +28,31 @@ def find_start_location(map: list[list[int]]) -> tuple[int, int] | None:
     return None
 
 # Takes player to new location. Returns True if successful, false otherwise
-"""def setLocation(x,y) -> bool:'''
-    location = getCurrentLocation(map)
-    print(location)
-    previous_x = location[0] # Convert from 1-based to 0-based indexing
-    previous_y = location[1]
-    if 0 <= x < len(map) and 0 <= y < len(map[0]):
-        if map[x-1][y-1] == 1 or map[x-1][y-1] == 3:
-            print(f"Teleportation successful, you are now at ({x}, {y})")
-            map[previous_x-1][previous_y-1] = 1
-            map[x-1][y-1] = 3
-            print(map)
-            return True
-        else:
-            print("Location unavailable.")
-            return False
-    else:
-        print("Invalid coordinates.")
-        return False"""
+import game_state
 
 def setLocation(x, y) -> bool:
-    location = getCurrentLocation(map)
-    print(location)
-
+    location = getCurrentLocation()
     if location is None:
-        print("Current location not found. Cannot set new location.")
+        print("Current location not found.")
         return False
 
-    previous_x = location[0]  # Convert from 1-based to 0-based indexing
-    previous_y = location[1]
+    previous_x, previous_y = location  # Already 0-based
 
-    if 0 <= x < len(map) and 0 <= y < len(map[0]):
-        if map[x - 1][y - 1] == 1 or map[x - 1][y - 1] == 3:
+    # Ensure x and y are 1-based from user, so convert to 0-based for map access
+    x0, y0 = x - 1, y - 1
+
+    # Check if the new coordinates are in bounds
+    if 0 <= x0 < len(game_state.map) and 0 <= y0 < len(game_state.map[0]):
+        if game_state.map[x0][y0] in [1, 3]:
+            # Reset old location to 1
+            game_state.map[previous_x][previous_y] = 1
+
+            # Set new location to 3
+            game_state.map[x0][y0] = 3
+
             print(f"Teleportation successful, you are now at ({x}, {y})")
-            map[previous_x - 1][previous_y - 1] = 1
-            map[x - 1][y - 1] = 3
-            print(map)
+            for row in game_state.map:
+                print(row)
             return True
         else:
             print("Location unavailable.")
@@ -68,6 +60,31 @@ def setLocation(x, y) -> bool:
     else:
         print("Invalid coordinates.")
         return False
+
+    def setLocation(x, y) -> bool:
+        location = getCurrentLocation(map)
+        print(location)
+
+        if location is None:
+            print("Current location not found. Cannot set new location.")
+            return False
+
+        previous_x = location[0]  # Convert from 1-based to 0-based indexing
+        previous_y = location[1]
+
+        if 0 <= x < len(map) and 0 <= y < len(map[0]):
+            if map[x - 1][y - 1] == 1 or map[x - 1][y - 1] == 3:
+                print(f"Teleportation successful, you are now at ({x}, {y})")
+                map[previous_x - 1][previous_y - 1] = 1
+                map[x - 1][y - 1] = 3
+                print(map)
+                return True
+            else:
+                print("Location unavailable.")
+                return False
+        else:
+            print("Invalid coordinates.")
+            return False
     
 # print goal reached once player had arrived at the final destination
 def goalReached() -> bool:
@@ -80,7 +97,7 @@ def goalReached() -> bool:
     return True
 
 def canGoNorth(map) -> bool:
-    location = getCurrentLocation(map)
+    location = getCurrentLocation()
     print(location)
     x = location[0] - 1 # Convert from 1-based to 0-based indexing
     y = location[1] - 1
@@ -90,7 +107,7 @@ def canGoNorth(map) -> bool:
     return False  # either out of bounds or blocked (i.e.: 0)
     
 def canGoSouth(map) -> bool:
-    location = getCurrentLocation(map)
+    location = getCurrentLocation()
     print(location)
     x = location[0] - 1 # Convert from 1-based to 0-based indexing
     y = location[1] - 1
@@ -100,7 +117,7 @@ def canGoSouth(map) -> bool:
     return False
 
 def canGoEast(map) -> bool:
-    location = getCurrentLocation(map)
+    location = getCurrentLocation()
     print(location)
     x = location[0] - 1 # Convert from 1-based to 0-based indexing
     y = location[1] - 1
@@ -110,7 +127,7 @@ def canGoEast(map) -> bool:
     return False  # either out of bounds or blocked (i.e.: 0)
 
 def canGoWest(map) -> bool:
-    location = getCurrentLocation(map)
+    location = getCurrentLocation()
     print(location)
     x = location[0] - 1 # Convert from 1-based to 0-based indexing
     y = location[1] - 1
@@ -119,39 +136,71 @@ def canGoWest(map) -> bool:
             return True  # able to go west
     return False  # either out of bounds or blocked (i.e.: 0)
 
-"""def goNorth():
-    global map, previous_locations
-    x, y = getCurrentLocation()
-    if x > 0 and map[x - 1][y] in [1, 2]:
-        map[x][y] = 1  # Set old position to 1
-        previous_locations.append((x, y))  # add old position to previous_positions list
+def goNorth():
+    location = getCurrentLocation()
+    if location is None:
+        print("Current location not found.")
+        return None
+
+    x, y = location
+    if x > 0 and game_state.map[x - 1][y] in [1, 2]:
+        game_state.map[x][y] = 1  # Clear old position
+        previous_locations.append((x, y))  # Track history
+        print(previous_locations)
         x -= 1
-        map[x][y] = 3  # Set new position
-        return (x,y)
+        game_state.map[x][y] = 3  # Set new position
+        return (x, y)
+    else:
+        print("You can't go north.")
+        return None
 
 def goSouth():
-    global map, previous_locations
-    x, y = getCurrentLocation()
-    if x < len(map) - 1 and map[x + 1][y] in [1, 2]:
-        map[x][y] = 1  # Set old position to 1
-        previous_locations.append((x, y))  # add old position to previous_positions list
+    location = getCurrentLocation()
+    if location is None:
+        print("Current location not found.")
+        return None
+
+    x, y = location
+    if x < len(game_state.map) - 1 and game_state.map[x + 1][y] in [1, 2]:
+        game_state.map[x][y] = 1
+        previous_locations.append((x, y))
+        print(previous_locations)
         x += 1
-        map[x][y] = 3  # Set new position
+        game_state.map[x][y] = 3
+        return (x, y)
+    print("You can't go south.")
+    return None
 
 def goEast():
-    global map, previous_locations
-    x, y = getCurrentLocation()
-    if y < len(map[0]) - 1 and map[x][y + 1] in [1, 2]:
-        map[x][y] = 1  # Set old position to 1
-        previous_locations.append((x, y))  # add old position to previous_positions list
+    location = getCurrentLocation()
+    if location is None:
+        print("Current location not found.")
+        return None
+
+    x, y = location
+    if y < len(game_state.map[0]) - 1 and game_state.map[x][y + 1] in [1, 2]:
+        game_state.map[x][y] = 1
+        previous_locations.append((x, y))
+        print(previous_locations)
         y += 1
-        map[x][y] = 3  # Set new position
+        game_state.map[x][y] = 3
+        return (x, y)
+    print("You can't go east.")
+    return None
 
 def goWest():
-    global map, previous_locations
-    x, y = getCurrentLocation()
-    if y > 0 and map[x][y-1] in [1, 2]:
-        map[x][y] = 1  # Set old position to 1
-        previous_locations.append((x, y))  # add old position to previous_positions list
+    location = getCurrentLocation()
+    if location is None:
+        print("Current location not found.")
+        return None
+
+    x, y = location
+    if y > 0 and game_state.map[x][y - 1] in [1, 2]:
+        game_state.map[x][y] = 1
+        previous_locations.append((x, y))
+        print(previous_locations)
         y -= 1
-        map[x][y] = 3  # Set new position"""
+        game_state.map[x][y] = 3
+        return (x, y)
+    print("You can't go west.")
+    return None
