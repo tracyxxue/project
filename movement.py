@@ -124,6 +124,7 @@ def goNorth():
         print(previous_locations)
         x -= 1
         game_state.map[x][y] = 3  # Set new position
+        print("go north successful, you are now at:",(x+1,y+1))
         return (x, y)
     else:
         print("You can't go north.")
@@ -142,6 +143,7 @@ def goSouth():
         print(previous_locations)
         x += 1
         game_state.map[x][y] = 3
+        print("go south successful, you are now at:",(x+1,y+1))
         return (x, y)
     print("You can't go south.")
     return None
@@ -159,6 +161,7 @@ def goEast():
         print(previous_locations)
         y += 1
         game_state.map[x][y] = 3
+        print("go east successful, you are now at:",(x+1,y+1))
         return (x, y)
     print("You can't go east.")
     return None
@@ -176,6 +179,7 @@ def goWest():
         print(previous_locations)
         y -= 1
         game_state.map[x][y] = 3
+        print("go west successful, you are now at:",(x+1,y+1))
         return (x, y)
     print("You can't go west.")
     return None

@@ -9,13 +9,21 @@ check = None
 
 
 def Starting_UI() -> None:
-    print("Welcome.")
+    print("""
+          **************Welcome to ATTACK DAT SQUIRREL***************
+          a zork-inspired game designed by Tracy Xue and Ruojia Zhang
+          ############################################################
+          Once upon a time...
+          the villan of the world...
+          Mr.KBLALA the Black Squirrel...
+          appeared on our very own lovely Haverford College...
+          You are tasked to fight with Mr.KBLALA
+          **Don't forget to find your weapen on your journey**
+          """)
     while True:
         start = input("Choose a level (easy / medium / hard): ")
         if start == "easy":
             game_state.map[:] = load_map("map1.txt")  # This updates the list in place
-            for row in game_state.map:
-                print(row)
             print("Good Choice")
             break
         elif start == "medium":
@@ -28,26 +36,28 @@ def Starting_UI() -> None:
             break
         else:
             print("Invalid choice. Please try again.")
-    print("few tips:")
-    
+    print(""" I have a few more helpful tips for you before you pivot :)
+          Your overall goal is to find Mr.KBLALA and use your weapon of choice to fight
+          To teleport:
+            type "teleport", then enter a coordinates that you want to travel to
+          To move by grid:
+            type "north?" or "south?" or "east?" or "west?" to test if you could move to your intended location
+            type "go north" or "go south" or "go east" or "go west" to make your movement.
+          To check where you have already traveled:
+            type "map"
+          GET READY TO FIGHT ;)""")
+
     start = find_start_location(map)
     if start:
         row, col = start
         map[row-1][col-1] = 3
-
     print("your start location is: ", start)
-
-    for row in map:
-        print(row)
+    
     check = True
-
     while check:
         user_command = input("Enter a command: ")
 
-        if user_command == "hi":
-            print("hi")
-
-        elif user_command == "north?":
+        if user_command == "north?":
             answer = canGoNorth(map)
             if answer == True:
                 print("yes")
@@ -110,7 +120,8 @@ def Starting_UI() -> None:
                 print("Cannot go west.")
 
         elif user_command == "teleport":
-            print(map)
+            for row in game_state.map:
+                print(row)
             x_coord = input("Which x position would you like to go? ")
             y_coord = input("Which y position would you like to go? ")
             x = int(x_coord)
@@ -119,7 +130,8 @@ def Starting_UI() -> None:
             success = setLocation(x,y)
             if success:
                 print("Teleportation successful.")
-                print(map)
+                for row in game_state.map:
+                    print(row)
             else:
                 print("Teleportation failed. Invalid or blocked location.")
         
