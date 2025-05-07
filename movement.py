@@ -17,7 +17,6 @@ def getCurrentLocation():
             if value == 3:
                 return row_index, col_index
     return None
-getCurrentLocation()
 
 def print_map():
     for row in game_state.map:
@@ -73,7 +72,6 @@ def goalReached() -> bool:
 
 def canGoNorth(map) -> bool:
     location = getCurrentLocation() #0-based coordinates
-    print(location)
     x = location[0]
     y = location[1]
     if 1 <= x < len(map) and 0 <= y < len(map[0]):
@@ -83,7 +81,6 @@ def canGoNorth(map) -> bool:
     
 def canGoSouth(map) -> bool:
     location = getCurrentLocation()
-    print(location)
     x = location[0]
     y = location[1]
     if 0 <= x < len(map) - 1 and 0 <= y < len(map[0]):
@@ -93,7 +90,6 @@ def canGoSouth(map) -> bool:
 
 def canGoEast(map) -> bool:
     location = getCurrentLocation()
-    print(location)
     x = location[0]
     y = location[1]
     if 0 <= x < len(map) and 0 <= y+1 < len(map[0]):
@@ -103,7 +99,6 @@ def canGoEast(map) -> bool:
 
 def canGoWest(map) -> bool:
     location = getCurrentLocation()
-    print(location)
     x = location[0]
     y = location[1]
     if 0 <= x < len(map) and 1 <= y < len(map[0]):
@@ -121,13 +116,12 @@ def goNorth():
     if x > 0 and game_state.map[x - 1][y] in [1, 2]:
         game_state.map[x][y] = 1  # Clear old position
         previous_locations.append((x+1, y+1))  # Track history
-        print(previous_locations)
+        #print(previous_locations)
         x -= 1
         game_state.map[x][y] = 3  # Set new position
         print("go north successful, you are now at:",(x+1,y+1))
         return (x, y)
     else:
-        print("You can't go north.")
         return None
 
 def goSouth():
@@ -140,12 +134,11 @@ def goSouth():
     if x < len(game_state.map) - 1 and game_state.map[x + 1][y] in [1, 2]:
         game_state.map[x][y] = 1
         previous_locations.append((x+1, y+1))
-        print(previous_locations)
+        #print(previous_locations)
         x += 1
         game_state.map[x][y] = 3
         print("go south successful, you are now at:",(x+1,y+1))
         return (x, y)
-    print("You can't go south.")
     return None
 
 def goEast():
@@ -158,12 +151,11 @@ def goEast():
     if y < len(game_state.map[0]) - 1 and game_state.map[x][y + 1] in [1, 2]:
         game_state.map[x][y] = 1
         previous_locations.append((x+1, y+1))
-        print(previous_locations)
+        #print(previous_locations)
         y += 1
         game_state.map[x][y] = 3
         print("go east successful, you are now at:",(x+1,y+1))
         return (x, y)
-    print("You can't go east.")
     return None
 
 def goWest():
@@ -176,10 +168,9 @@ def goWest():
     if y > 0 and game_state.map[x][y - 1] in [1, 2]:
         game_state.map[x][y] = 1
         previous_locations.append((x+1, y+1))
-        print(previous_locations)
+        #print(previous_locations)
         y -= 1
         game_state.map[x][y] = 3
         print("go west successful, you are now at:",(x+1,y+1))
         return (x, y)
-    print("You can't go west.")
     return None
