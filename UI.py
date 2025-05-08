@@ -5,6 +5,7 @@ from movement import *
 from progressive_map import *
 from blessed import Terminal
 import time
+from progressive_map import *
 check = None
 
 
@@ -134,7 +135,7 @@ def Starting_UI() -> None:
                 print("Teleportation failed. Invalid or blocked location.")
         
         elif user_command == "map":
-            print_map()
+            draw_map()
 
         else:
             print("Invalid input")

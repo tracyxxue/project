@@ -2,6 +2,8 @@ from blessed import Terminal
 import time
 import movement as m
 
+term= Terminal()
+"""
 game_map=m.tentative_map
 for x, row in enumerate(game_map):
      for y, col in enumerate(row):
@@ -22,9 +24,11 @@ def draw_map():
     for y, row in enumerate(game_map):
             for x, item in enumerate(row):
                 symbol = symbols_list.get(str(item))
+                if item=="1":
+                    print(term.move_xy(x, y) + term.red + symbol ) 
                 print(term.move_xy(x, y) + symbol)
     time.sleep(1)
-
+"""
 
 squirrel = [
     "   (\__/)",     
@@ -64,7 +68,7 @@ def squirrel_battle():
     
 
 #if m.goalReached(): 
-draw_map()
+
 if True:
     squirrel_battle()
 

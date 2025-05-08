@@ -17,10 +17,8 @@ def progressive_map():
             game_map[row][col]=1
     return game_map
 
-game_map=[[0,1,0], [0,1,0],[0,2,0]]
-
 def draw_map():
-    #game_map=progressive_map()
+    game_map=progressive_map()
     print(term.clear())
     for y, row in enumerate(game_map):
         for x, item in enumerate(row):
