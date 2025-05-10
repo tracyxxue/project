@@ -5,7 +5,8 @@ from movement import *
 from progressive_map import *
 from blessed import Terminal
 import time
-from progressive_map import *
+from squirrel_battle_graphical_UI import *
+from random_maze import generate_maze
 check = None
 
 
@@ -18,11 +19,10 @@ def Starting_UI() -> None:
           the villan of the world...
           Mr.KBLALA the Black Squirrel...
           appeared on our very own lovely Haverford College...
-          You are tasked to fight with Mr.KBLALA
-          **Don't forget to find your weapen on your journey**
+          You are tasked to reach the goal of the maze and chase off Mr.KBLALA
           """)
     while True:
-        start = input("Choose a level (easy / medium / hard): ")
+        start = input("Choose a level (easy / medium / hard /random): ")
         if start == "easy":
             game_state.map[:] = load_map("map1.txt")  # This updates the list in place
             print("Good Choice")
@@ -35,10 +35,16 @@ def Starting_UI() -> None:
             game_state.map[:] = load_map("map3.txt")
             print("Good Choice")
             break
+        elif start=="random":
+            row=int(input("how many rows you want?"))
+            col=int(input("how many column you want?"))
+            game_state.map=generate_maze(row, col)
+            print(game_state.map)
+            print("A random map has been created!")
+            break
         else:
             print("Invalid choice. Please try again.")
     print(""" I have a few more helpful tips for you before you pivot :)
-          Your overall goal is to find Mr.KBLALA and use your weapon of choice to fight
           To teleport:
             type "teleport", then enter a coordinates that you want to travel to
           To move by grid:
@@ -46,7 +52,7 @@ def Starting_UI() -> None:
             type "go north" or "go south" or "go east" or "go west" to make your movement.
           To check where you have already traveled:
             type "map"
-          GET READY TO FIGHT ;)""")
+          GET READY FOR YOUR JOURNEY :)""")
 
     start = find_start_location(map)
     if start:
@@ -54,10 +60,10 @@ def Starting_UI() -> None:
         map[row-1][col-1] = 3
     print("your start location is: ", start)
     
-    check = True
-    while check:
-        user_command = input("Enter a command: ")
-
+    while True:
+        user_command = input("Enter a command: \n")
+        if goalReached()==True:
+            break
         if user_command == "north?":
             answer = canGoNorth(map)
             if answer == True:
@@ -89,38 +95,33 @@ def Starting_UI() -> None:
         elif user_command == "go north":
             if goNorth():
                 print("Moved north.")
-                #for row in game_state.map:
-                    #print(row)
+                
             else:
                 print("Cannot go north.")
 
         elif user_command == "go south":
             if goSouth():
                 print("Moved south.")
-                #for row in game_state.map:
-                    #print(row)
+               
             else:
                 print("Cannot go south.")
 
         elif user_command == "go east":
             if goEast():
                 print("Moved east.")
-                #for row in game_state.map:
-                    #print(row)
+             
             else:
                 print("Cannot go east.")
 
         elif user_command == "go west":
             if goWest():
                 print("Moved west.")
-                #for row in game_state.map:
-                    #print(row)
+             
             else:
                 print("Cannot go west.")
 
         elif user_command == "teleport":
-            for row in game_state.map:
-                print(row)
+            draw_map()
             x_coord = input("Which x position would you like to go? ")
             y_coord = input("Which y position would you like to go? ")
             x = int(x_coord)
@@ -129,16 +130,18 @@ def Starting_UI() -> None:
             success = setLocation(x,y)
             if success:
                 print("Teleportation successful.")
-                for row in game_state.map:
+                for row in game_state.map:   
                     print(row)
             else:
                 print("Teleportation failed. Invalid or blocked location.")
         
         elif user_command == "map":
             draw_map()
-
+        
         else:
             print("Invalid input")
+    squirrel_battle()
 
-
-Starting_UI()
+        
+if __name__ == "__main__":
+    Starting_UI()

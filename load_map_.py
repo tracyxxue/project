@@ -1,8 +1,10 @@
+
 def load_map(filename: str) -> list[list[int]]:
     with open(filename, 'r') as file:
         lines = file.readlines()
     
     col_size, row_size = map(int, lines[0].strip().split('x'))
+    print("This is a map with "+ str(col_size) +' columns and '+str(row_size) +" rows.")
     start_line = 1
     list_out = []
     
@@ -14,5 +16,3 @@ def load_map(filename: str) -> list[list[int]]:
         list_out.append(list_in)
     
     return list_out
-
-print(load_map("map1.txt"))

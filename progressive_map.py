@@ -1,32 +1,33 @@
 from blessed import Terminal
 import time
-import movement as m
+from movement import *
+from game_state import map, previous_locations
 
 term= Terminal()
-symbols_list = {'0': '█', '1': '█',  '2': '★'}
+symbols_list = {'0': '★ ',    # the wall is represented by stars and the traveled path represented by blocks
+    '1': '░ '}
 
 def progressive_map():
-    game_map=m.tentative_map
-    for x, row in enumerate(game_map):
-        for y, col in enumerate(row):
-            game_map[x][y]=0
+    game_map = [[0] * len(map[0]) for i in range(len(map))]    
+     #initialize the map all to 0
 
-    locations=m.previous_positions
-    for i, row in enumerate(locations):
-        for m, col in enumerate (row):
-            game_map[row][col]=1
+    locations = previous_locations
+    for item in locations:              #update the locations that has been traveled to 1
+        row, col = item  
+        game_map[row][col] = 1
+
     return game_map
+
 
 def draw_map():
     game_map=progressive_map()
     print(term.clear())
-    for y, row in enumerate(game_map):
+    for y, row in enumerate(game_map):        
         for x, item in enumerate(row):
-            symbol = symbols_list.get(str(item))
-            if item==1:
-                print(term.move_xy(x+5,y+5) + term.red+ symbol + term.normal) 
-            else:
-                print(term.move_xy(x+5,y+5) + symbol)
-    time.sleep(1)
+            symbol = symbols_list.get(str(item), ' ')   #print the progressive map
+            if item == 1:
+                print(term.move_xy(x*2, y) + term.red + symbol + term.normal)  # the path printed in red and the space
+            else:                                                    # between elements doubeled for better visualization
+                print(term.move_xy(x*2, y) + symbol+ term.normal)\
 
-draw_map()
+    time.sleep(3)

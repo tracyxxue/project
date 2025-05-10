@@ -5,8 +5,8 @@ previous_positions = []
 # make a global variable for map
 """
 import game_state
-from game_state import map
-previous_locations = []
+from game_state import map, previous_locations
+from progressive_map import *
 x = 0
 y = 0
 
@@ -16,19 +16,14 @@ def getCurrentLocation():
         for col_index, value in enumerate(row):
             if value == 3:
                 return row_index, col_index
-    return None
 
-def print_map():
-    for row in game_state.map:
-        print(row)
-
-def find_start_location(map: list[list[int]]) -> tuple[int, int] | None:
+def find_start_location(map: list[list[int]]) -> list[int, int]:
     for row_index, row in enumerate(map):
         for col_index, value in enumerate(row):
             if value == 1:
-                return (row_index+1, col_index+1)
-    return None
-
+                previous_locations.append([row_index, col_index])
+                return [row_index+1, col_index+1]
+   
 # Takes player to new location. Returns True if successful, false otherwise
 import game_state
 
@@ -45,7 +40,7 @@ def setLocation(x, y) -> bool:
         if game_state.map[x0][y0] in [1, 3]:
             # Reset old location to 1
             game_state.map[previous_x][previous_y] = 1
-            previous_locations.append((previous_x+1, previous_y+1))
+            previous_locations.append([previous_x+1, previous_y+1])
             print("previous locations are: ", previous_locations)
             # Set new location to 3
             game_state.map[x0][y0] = 3
@@ -62,12 +57,11 @@ def setLocation(x, y) -> bool:
     
 # print goal reached once player had arrived at the final destination
 def goalReached() -> bool:
-    current_map = map
-    for row in current_map:
+    for row in game_state.map:
         if 2 in row:
-            print("Ouch, You have not found Mr.KBLALA yet")
+            #print("Ouch, You have not found Mr.KBLALA yet")
             return False
-    print("you have found Mr.KBLALA! Get ready to fight!")
+    #print("you have found Mr.KBLALA! Get ready to fight!")
     return True
 
 def canGoNorth(map) -> bool:
@@ -82,7 +76,7 @@ def canGoNorth(map) -> bool:
 def canGoSouth(map) -> bool:
     location = getCurrentLocation()
     x = location[0]
-    y = location[1]
+    y = location[1] 
     if 0 <= x < len(map) - 1 and 0 <= y < len(map[0]):
         if map[x + 1][y] == 1 or map[x + 1][y] == 2:
             return True
@@ -115,10 +109,9 @@ def goNorth():
     x, y = location
     if x > 0 and game_state.map[x - 1][y] in [1, 2]:
         game_state.map[x][y] = 1  # Clear old position
-        previous_locations.append((x+1, y+1))  # Track history
-        #print(previous_locations)
         x -= 1
         game_state.map[x][y] = 3  # Set new position
+        previous_locations.append([x, y])
         print("go north successful, you are now at:",(x+1,y+1))
         return (x, y)
     else:
@@ -129,14 +122,12 @@ def goSouth():
     if location is None:
         print("Current location not found.")
         return None
-
     x, y = location
     if x < len(game_state.map) - 1 and game_state.map[x + 1][y] in [1, 2]:
         game_state.map[x][y] = 1
-        previous_locations.append((x+1, y+1))
-        #print(previous_locations)
         x += 1
         game_state.map[x][y] = 3
+        previous_locations.append([x, y])
         print("go south successful, you are now at:",(x+1,y+1))
         return (x, y)
     return None
@@ -146,14 +137,12 @@ def goEast():
     if location is None:
         print("Current location not found.")
         return None
-
     x, y = location
     if y < len(game_state.map[0]) - 1 and game_state.map[x][y + 1] in [1, 2]:
         game_state.map[x][y] = 1
-        previous_locations.append((x+1, y+1))
-        #print(previous_locations)
         y += 1
         game_state.map[x][y] = 3
+        previous_locations.append([x, y])
         print("go east successful, you are now at:",(x+1,y+1))
         return (x, y)
     return None
@@ -167,10 +156,9 @@ def goWest():
     x, y = location
     if y > 0 and game_state.map[x][y - 1] in [1, 2]:
         game_state.map[x][y] = 1
-        previous_locations.append((x+1, y+1))
-        #print(previous_locations)
         y -= 1
         game_state.map[x][y] = 3
+        previous_locations.append([x, y])
         print("go west successful, you are now at:",(x+1,y+1))
         return (x, y)
     return None
